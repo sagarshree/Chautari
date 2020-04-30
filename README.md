@@ -1,2 +1,1 @@
-# Chautari
-Social messaging app
+## FlutterShare

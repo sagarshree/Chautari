@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "307189480085",
+    "firebase_url": "https://chautari-ccfba.firebaseio.com",
+    "project_id": "chautari-ccfba",
+    "storage_bucket": "chautari-ccfba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307189480085:android:4bd2db6de3bc75db7c799c",
+        "android_client_info": {
+          "package_name": "com.sagarshree.chautari"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "307189480085-8blk1mrogfvfmigloq6h50cipubu5t7h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sagarshree.chautari",
+            "certificate_hash": "d3b3dbb254c2a3a9afbf1d15725f0b8cb80bcfd6"
+          }
+        },
+        {
+          "client_id": "307189480085-e2u7k1q4j1ad0r94q2chctcnbn9qik1o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbkm7YUktQX9PjSmkXDR4jOGsEaGSy4o8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "307189480085-e2u7k1q4j1ad0r94q2chctcnbn9qik1o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
