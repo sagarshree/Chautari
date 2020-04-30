@@ -27,13 +27,12 @@ class _TimelineState extends State<Timeline> {
   //   });
   // }
 
-  getUsersById() {
-    final String id = 'xjPeHPNeSIHSKuIRZpBJ';
-    userRef.document(id).get().then((DocumentSnapshot doc) {
-      print(doc.data);
-      print(doc.documentID);
-      print(doc.exists);
-    });
+  getUsersById() async {
+    final String id = 'h2tcpe1jnOPs602iO5F2';
+    final DocumentSnapshot doc = await userRef.document(id).get();
+    print(doc.data);
+    print(doc.documentID);
+    print(doc.exists);
   }
 
   @override
