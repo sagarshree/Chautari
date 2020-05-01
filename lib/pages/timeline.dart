@@ -16,13 +16,22 @@ class _TimelineState extends State<Timeline> {
   @override
   void initState() {
     super.initState();
-    createUser();
+    // createUser();
+    updateUser();
     getUsers();
   }
 
   createUser() {
     userRef.document('sadsgdjgas').setData({
       'username': 'Manoj',
+      'postCount': 0,
+      'isAdmin': false,
+    });
+  }
+
+  updateUser() {
+    userRef.document('nC150cG9K2P2wkhanf3N').updateData({
+      'username': 'Rupesh',
       'postCount': 0,
       'isAdmin': false,
     });
