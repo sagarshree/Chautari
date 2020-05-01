@@ -16,7 +16,16 @@ class _TimelineState extends State<Timeline> {
   @override
   void initState() {
     super.initState();
+    createUser();
     getUsers();
+  }
+
+  createUser() {
+    userRef.add({
+      'username': 'Manoj',
+      'postCount': 0,
+      'isAdmin': false,
+    });
   }
 
   getUsers() async {
