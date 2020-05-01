@@ -21,7 +21,7 @@ class _TimelineState extends State<Timeline> {
   }
 
   createUser() {
-    userRef.add({
+    userRef.document('sadsgdjgas').setData({
       'username': 'Manoj',
       'postCount': 0,
       'isAdmin': false,
