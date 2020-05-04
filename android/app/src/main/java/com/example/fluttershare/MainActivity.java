@@ -1,4 +1,4 @@
-package com.example.fluttershare;
+package com.example.chautari;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

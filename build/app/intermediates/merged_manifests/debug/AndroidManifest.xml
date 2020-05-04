@@ -31,9 +31,9 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="fluttershare" >
+        android:label="Chautari" >
         <activity
-            android:name="com.example.fluttershare.MainActivity"
+            android:name="com.example.chautari.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"

@@ -34,6 +34,7 @@ dependencies:
   timeago: 2.0.17
   cached_network_image:
   flutter_svg:
+  font_awesome_flutter: ^8.8.1
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,10 @@ flutter:
     - family: Signatra
       fonts:
         - asset: assets/fonts/Signatra.ttf
+        
+    - family: Galada
+      fonts:
+        - asset: assets/fonts/Galada-Regular.ttf
   assets:
     - assets/images/google_signin_button.png
     - assets/images/upload.svg

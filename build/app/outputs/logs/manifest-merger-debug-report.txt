@@ -76,7 +76,7 @@ INJECTED from /home/shree/Documents/Development/Flutter Projects/Chautari/androi
 INJECTED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 	package
-		ADDED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/main/AndroidManifest.xml:2:5-39
+		ADDED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/main/AndroidManifest.xml:2:5-35
 		INJECTED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/main/AndroidManifest.xml
 		INJECTED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/debug/AndroidManifest.xml
 	android:versionName
@@ -146,12 +146,12 @@ MERGED from [com.google.android.gms:play-services-measurement-base:16.0.3] /home
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.0.2] /home/shree/.gradle/caches/transforms-1/files-1.1/core-1.0.2.aar/a4e1b206a251b1b4dc8272286f68a871/AndroidManifest.xml:22:18-86
 	android:label
-		ADDED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/main/AndroidManifest.xml:11:9-37
+		ADDED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/main/AndroidManifest.xml:11:9-33
 	android:icon
 		ADDED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/main/AndroidManifest.xml:12:9-43
 	android:name
 		ADDED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/main/AndroidManifest.xml:10:9-57
-activity#com.example.fluttershare.MainActivity
+activity#com.example.chautari.MainActivity
 ADDED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/main/AndroidManifest.xml:13:9-31:20
 	android:launchMode
 		ADDED from /home/shree/Documents/Development/Flutter Projects/Chautari/android/app/src/main/AndroidManifest.xml:15:13-43

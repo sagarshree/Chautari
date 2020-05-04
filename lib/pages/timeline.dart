@@ -11,46 +11,9 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
+  final Column column;
+  _TimelineState({this.column});
   List<dynamic> users = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // createUser();
-    updateUser();
-    getUsers();
-  }
-
-  createUser() {
-    userRef.document('sadsgdjgas').setData({
-      'username': 'Manoj',
-      'postCount': 0,
-      'isAdmin': false,
-    });
-  }
-
-  updateUser() {
-    userRef.document('nC150cG9K2P2wkhanf3N').updateData({
-      'username': 'Rupesh',
-      'postCount': 0,
-      'isAdmin': false,
-    });
-  }
-
-  getUsers() async {
-    final QuerySnapshot snapshot = await userRef.getDocuments();
-    setState(() {
-      users = snapshot.documents;
-    });
-  }
-
-  // getUsersById() async {
-  //   final String id = 'h2tcpe1jnOPs602iO5F2';
-  //   final DocumentSnapshot doc = await userRef.document(id).get();
-  //   print(doc.data);
-  //   print(doc.documentID);
-  //   print(doc.exists);
-  // }
 
   @override
   Widget build(context) {
