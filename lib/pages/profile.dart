@@ -298,17 +298,6 @@ class _ProfileState extends State<Profile> {
     setState(() {
       this.postOrientation = postOrientation;
     });
-    if (postOrientation == 'grid') {
-      setState(() {
-        gridIconColor = Theme.of(context).primaryColor;
-        listIconColor = Colors.grey;
-      });
-    } else if (postOrientation == 'list') {
-      setState(() {
-        listIconColor = Theme.of(context).primaryColor;
-        gridIconColor = Colors.grey;
-      });
-    }
   }
 
   buildTogglePostOrientation() {
@@ -318,14 +307,18 @@ class _ProfileState extends State<Profile> {
         IconButton(
           icon: Icon(
             Icons.grid_on,
-            color: gridIconColor,
+            color: postOrientation == 'grid'
+                ? Theme.of(context).primaryColor
+                : Colors.grey,
           ),
           onPressed: () => setOrientation('grid'),
         ),
         IconButton(
           icon: Icon(
             Icons.list,
-            color: listIconColor,
+            color: postOrientation == 'list'
+                ? Theme.of(context).primaryColor
+                : Colors.grey,
           ),
           onPressed: () => setOrientation('list'),
         )
