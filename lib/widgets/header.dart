@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-Widget header(context, {String title, bool removeBackButton = false}) {
+Widget header(
+  context, {
+  String title,
+  bool removeBackButton = false,
+}) {
   return AppBar(
     automaticallyImplyLeading: removeBackButton ? false : true,
     backgroundColor: Theme.of(context).accentColor,

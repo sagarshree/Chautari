@@ -1,6 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttershare/models/user.dart';
+import 'package:fluttershare/pages/timeline.dart';
 import 'package:fluttershare/widgets/header.dart';
+import 'package:fluttershare/widgets/progress.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -8,26 +14,52 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  TextEditingController searchController = TextEditingController();
+  Future<QuerySnapshot> searchResultsFuture;
+
+  handleSearch(String query) {
+    Future<QuerySnapshot> users = userRef
+        .where('displayName', isGreaterThanOrEqualTo: query)
+        .getDocuments();
+
+    setState(() {
+      searchResultsFuture = users;
+    });
+  }
+
+  clearSearch() {
+    searchController.clear();
+
+    setState(() {
+      searchResultsFuture = null;
+    });
+  }
+
   AppBar buildSearchField() {
     return AppBar(
       backgroundColor: Colors.white,
       title: TextFormField(
+        controller: searchController,
         decoration: InputDecoration(
-            hintText: 'Find  Gafadi',
-            filled: false,
-            prefixIcon: Icon(
-              Icons.account_box,
-              size: 28.0,
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(Icons.clear),
-              onPressed: () => print('Cleared'),
-            )),
+          border: InputBorder.none,
+          hintText: 'Find  Gafadi',
+          filled: false,
+          prefixIcon: Icon(
+            FontAwesomeIcons.search,
+            size: 28.0,
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: clearSearch,
+          ),
+        ),
+        onFieldSubmitted: handleSearch,
       ),
     );
   }
 
   Container buildNoContent() {
+    final orientation = MediaQuery.of(context).orientation;
     return Container(
       child: Center(
         child: ListView(
@@ -35,7 +67,7 @@ class _SearchState extends State<Search> {
           children: <Widget>[
             SvgPicture.asset(
               'assets/images/search.svg',
-              height: 300.0,
+              height: orientation == Orientation.portrait ? 300.0 : 200,
             ),
             Text(
               'Find Gafadi ...',
@@ -53,23 +85,82 @@ class _SearchState extends State<Search> {
     );
   }
 
+  buildSearchResults() {
+    return FutureBuilder(
+      future: searchResultsFuture,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return circularProgress();
+        }
+        List<UserResult> searchResults = [];
+        snapshot.data.documents.forEach((doc) {
+          User user = User.fromDocuments(doc);
+          UserResult searchResult = UserResult(user: user);
+          searchResults.add(searchResult);
+          print(searchResult);
+        });
+        return ListView(
+          children: searchResults,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.7),
+      backgroundColor: Theme.of(context).primaryColorLight,
       appBar: buildSearchField(),
-      body: buildNoContent(),
+      body:
+          searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
     );
   }
 }
 
 class UserResult extends StatelessWidget {
+  final User user;
+
+  UserResult({this.user});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: header(context, title: 'Search'),
-      body: Center(
-        child: Text('Search'),
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Card(
+            elevation: 10,
+            child: GestureDetector(
+              onTap: () => print('User Details!'),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: CachedNetworkImageProvider(user.photoUrl),
+                  backgroundColor: Colors.grey,
+                  radius: 27.0,
+                ),
+                title: Text(
+                  user.displayName,
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  '@${user.username}',
+                  style: TextStyle(
+                    color: Colors.black54,
+                  ),
+                ),
+                trailing: IconButton(
+                    icon: Icon(
+                      Icons.group_add,
+                      size: 40,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {}),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 1,
+          )
+        ],
       ),
     );
   }

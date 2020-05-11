@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/models/user.dart';
@@ -9,11 +10,16 @@ import 'package:fluttershare/pages/search.dart';
 import 'package:fluttershare/pages/timeline.dart';
 import 'package:fluttershare/pages/upload.dart';
 import 'package:fluttershare/widgets/header.dart';
+import 'package:fluttershare/widgets/unauth_landscape.dart';
+import 'package:fluttershare/widgets/unauth_portrait.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
-final userRef = Firestore.instance.collection('users');
+final StorageReference storageRef = FirebaseStorage.instance.ref();
+final usersRef = Firestore.instance.collection('users');
+final postsRef = Firestore.instance.collection('posts');
+
 final timeStamp = DateTime.now();
 User currentUser;
 
@@ -136,9 +142,11 @@ class _HomeState extends State<Home> {
             ],
           ),
           ActivityFeed(),
-          Upload(),
+          Upload(currentUser: currentUser),
           Search(),
-          Profile(),
+          Profile(
+            profileId: currentUser?.id,
+          ),
         ],
         controller: pageController,
         onPageChanged: onPageChanged,
@@ -181,139 +189,12 @@ class _HomeState extends State<Home> {
     // );
   }
 
-  Scaffold buildUnAuthScreen() {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).accentColor,
-              Theme.of(context).primaryColor,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Chautari',
-              style: TextStyle(
-                fontFamily: 'Galada',
-                fontSize: 100,
-                color: Colors.white,
-              ),
-            ),
-            Text(
-              'Let\'s share our thoughts!!',
-              style: TextStyle(
-                fontFamily: 'Galada',
-                fontSize: 30,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(
-              height: 200.0,
-            ),
-            Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Sign in with',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30.0,
-                        fontFamily: 'Galada'),
-                  ),
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: logIn,
-                            child: CircleAvatar(
-                              radius: 35.0,
-                              backgroundColor: Colors.white,
-                              child: Icon(
-                                FontAwesomeIcons.google,
-                                size: 40.0,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          Text(
-                            'Google',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontFamily: 'Galada'),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        width: 80.0,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              print('Facebook Login!');
-                            },
-                            child: CircleAvatar(
-                              radius: 35.0,
-                              backgroundColor: Colors.white,
-                              child: Icon(
-                                FontAwesomeIcons.facebookF,
-                                size: 40,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          Text(
-                            'Facebook',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontFamily: 'Galada',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-            // GestureDetector(
-            //   onTap: logIn,
+  Widget buildUnAuthScreen() {
+    final orientation = MediaQuery.of(context).orientation;
 
-            //   // child: Container(
-            //   //   width: 260.0,
-            //   //   height: 60.0,
-            //   //   decoration: BoxDecoration(
-            //   //     image: DecorationImage(
-            //   //       image: AssetImage('assets/images/google_signin_button.png'),
-            //   //       fit: BoxFit.cover,
-            //   //     ),
-            //   //   ),
-            //   // ),
-            // ),
-          ],
-        ),
-      ),
-    );
+    return orientation == Orientation.portrait
+        ? UnauthPortrait(func: logIn)
+        : UnauthLandscape(func: logIn);
   }
 
   @override

@@ -1,1 +1,1 @@
-D com/baseflow/googleapiavailability/GoogleApiAvailabilityPlugin$GooglePlayServicesAvailability
+D com/baseflow/googleapiavailability/MethodCallHandlerImpl$GooglePlayServicesAvailability

@@ -1,17 +1,3 @@
-android/support/v4/media/MediaBrowserCompat$MediaItem$Flags.class
-android/support/v4/media/MediaMetadataCompat$BitmapKey.class
-android/support/v4/media/MediaMetadataCompat$LongKey.class
-android/support/v4/media/MediaMetadataCompat$RatingKey.class
-android/support/v4/media/MediaMetadataCompat$TextKey.class
-android/support/v4/media/RatingCompat$StarStyle.class
-android/support/v4/media/RatingCompat$Style.class
-android/support/v4/media/session/MediaSessionCompat$SessionFlags.class
-android/support/v4/media/session/PlaybackStateCompat$Actions.class
-android/support/v4/media/session/PlaybackStateCompat$ErrorCode.class
-android/support/v4/media/session/PlaybackStateCompat$MediaKeyAction.class
-android/support/v4/media/session/PlaybackStateCompat$RepeatMode.class
-android/support/v4/media/session/PlaybackStateCompat$ShuffleMode.class
-android/support/v4/media/session/PlaybackStateCompat$State.class
 androidx/annotation/AnimRes.class
 androidx/annotation/AnimatorRes.class
 androidx/annotation/AnyRes.class
@@ -25,6 +11,7 @@ androidx/annotation/CheckResult.class
 androidx/annotation/ColorInt.class
 androidx/annotation/ColorLong.class
 androidx/annotation/ColorRes.class
+androidx/annotation/ContentView.class
 androidx/annotation/DimenRes.class
 androidx/annotation/Dimension.class
 androidx/annotation/DrawableRes.class
@@ -34,6 +21,10 @@ androidx/annotation/FractionRes.class
 androidx/annotation/GuardedBy.class
 androidx/annotation/HalfFloat.class
 androidx/annotation/IdRes.class
+androidx/annotation/InspectableProperty$EnumEntry.class
+androidx/annotation/InspectableProperty$FlagEntry.class
+androidx/annotation/InspectableProperty$ValueType.class
+androidx/annotation/InspectableProperty.class
 androidx/annotation/IntDef.class
 androidx/annotation/IntRange.class
 androidx/annotation/IntegerRes.class
@@ -76,6 +67,8 @@ androidx/core/app/NotificationCompat$BadgeIconType.class
 androidx/core/app/NotificationCompat$GroupAlertBehavior.class
 androidx/core/app/NotificationCompat$NotificationVisibility.class
 androidx/core/app/NotificationCompat$StreamType.class
+androidx/core/app/RemoteInput$EditChoicesBeforeSending.class
+androidx/core/app/RemoteInput$Source.class
 androidx/core/app/ServiceCompat$StopForegroundFlags.class
 androidx/core/content/PermissionChecker$PermissionResult.class
 androidx/core/content/pm/PermissionInfoCompat$Protection.class
@@ -94,9 +87,6 @@ androidx/core/view/ViewCompat$ScrollIndicators.class
 androidx/core/widget/TextViewCompat$AutoSizeTextType.class
 androidx/lifecycle/Lifecycle$Event.class
 androidx/lifecycle/OnLifecycleEvent.class
-androidx/media/AudioAttributesCompat$AttributeContentType.class
-androidx/media/AudioAttributesCompat$AttributeUsage.class
-androidx/media/VolumeProviderCompat$ControlType.class
 androidx/multidex/MultiDex$V14$ElementConstructor.class
 androidx/multidex/MultiDex$V14$ICSElementConstructor.class
 androidx/multidex/MultiDex$V14$JBMR11ElementConstructor.class
@@ -117,7 +107,7 @@ androidx/versionedparcelable/ParcelField.class
 androidx/versionedparcelable/VersionedParcelize.class
 androidx/viewpager/widget/ViewPager$DecorView.class
 com/baseflow/geolocator/tasks/LocationUpdatesUsingLocationManagerTask$GeolocationAccuracy.class
-com/baseflow/googleapiavailability/GoogleApiAvailabilityPlugin$GooglePlayServicesAvailability.class
+com/baseflow/googleapiavailability/MethodCallHandlerImpl$GooglePlayServicesAvailability.class
 com/baseflow/location_permissions/LocationPermissionsPlugin$PermissionStatus.class
 com/baseflow/location_permissions/LocationPermissionsPlugin$ServiceStatus.class
 com/google/android/gms/auth/api/accounttransfer/AuthenticatorTransferCompletionStatus.class
@@ -131,8 +121,10 @@ com/google/android/gms/common/annotation/KeepForSdk.class
 com/google/android/gms/common/annotation/KeepForSdkWithFieldsAndMethods.class
 com/google/android/gms/common/annotation/KeepForSdkWithMembers.class
 com/google/android/gms/common/annotation/KeepName.class
+com/google/android/gms/common/annotation/NonNullApi.class
 com/google/android/gms/common/api/Result.class
 com/google/android/gms/common/internal/HideFirstParty.class
+com/google/android/gms/common/internal/Preconditions.class
 com/google/android/gms/common/internal/ReflectedParcelable.class
 com/google/android/gms/common/internal/ShowFirstParty.class
 com/google/android/gms/common/internal/safeparcel/AbstractSafeParcelable.class
@@ -148,7 +140,7 @@ com/google/android/gms/common/util/DynamiteApi.class
 com/google/android/gms/common/util/RetainForClient.class
 com/google/android/gms/common/util/VisibleForTesting.class
 com/google/android/gms/common/zzc.class
-com/google/android/gms/common/zzm.class
+com/google/android/gms/common/zzl.class
 com/google/android/gms/flags/FlagSource.class
 com/google/android/gms/internal/auth/zzax.class
 com/google/android/gms/location/ActivityTransition$SupportedActivityTransition.class
