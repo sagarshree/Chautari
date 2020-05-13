@@ -9,16 +9,16 @@ import 'package:fluttershare/pages/profile.dart';
 import 'package:fluttershare/pages/search.dart';
 import 'package:fluttershare/pages/timeline.dart';
 import 'package:fluttershare/pages/upload.dart';
-import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/widgets/unauth_landscape.dart';
 import 'package:fluttershare/widgets/unauth_portrait.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final usersRef = Firestore.instance.collection('users');
 final postsRef = Firestore.instance.collection('posts');
+final commentsRef = Firestore.instance.collection('comments');
+final activityFeedRef = Firestore.instance.collection('feed');
 
 final timeStamp = DateTime.now();
 User currentUser;
@@ -130,17 +130,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: PageView(
         children: <Widget>[
-          // Timeline(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Authenticated'),
-              RaisedButton(
-                child: Text('Logout'),
-                onPressed: logOut,
-              )
-            ],
-          ),
+          Timeline(),
           ActivityFeed(),
           Upload(currentUser: currentUser),
           Search(),

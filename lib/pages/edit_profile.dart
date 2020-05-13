@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
 import 'package:fluttershare/models/user.dart';
+import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/timeline.dart';
 import 'package:fluttershare/widgets/progress.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as Im;
 
 class EditProfile extends StatefulWidget {
   final String currentUserId;
@@ -14,13 +21,18 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController displayNameController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
+  File file;
+  String photoUrl;
   bool isLoading = false;
   User user;
   bool _validBio = true;
   bool _validDisplayName = true;
+  bool filePicked = false;
+  bool isUploading = false;
+  bool isSubmitButtonDisabled = false;
 
   @override
   void initState() {
@@ -96,7 +108,7 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  updateProfileData() {
+  updateProfileData() async {
     setState(() {
       displayNameController.text.trim().length < 3 ||
               displayNameController.text.isEmpty
@@ -106,24 +118,122 @@ class _EditProfileState extends State<EditProfile> {
           ? _validBio = false
           : _validBio = true;
     });
+
     if (_validBio && _validDisplayName) {
+      setState(() {
+        isUploading = true;
+        isSubmitButtonDisabled = true;
+      });
+
       userRef.document(widget.currentUserId).updateData({
         'displayName': displayNameController.text,
         'bio': bioController.text,
       });
-      SnackBar snackBar = SnackBar(
-        content: Text('Profile Updated'),
-      );
 
-      _scaffoldKey.currentState.showSnackBar(snackBar);
+      setState(() {
+        isUploading = false;
+      });
     }
+    file = null;
+    filePicked = false;
+
+    Navigator.pop(context);
+  }
+
+  handleCameraPhoto() async {
+    Navigator.pop(context);
+    File file = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      this.file = file;
+    });
+    await compressImage();
+    String photoUrl = await uploadImage(file);
+    userRef.document(widget.currentUserId).updateData({
+      'photoUrl': photoUrl,
+    });
+    setState(() {
+      filePicked = true;
+    });
+  }
+
+  handleGalleryPhoto() async {
+    Navigator.pop(context);
+    File file = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+    setState(() {
+      this.file = file;
+    });
+    await compressImage();
+    String photoUrl = await uploadImage(file);
+    userRef.document(widget.currentUserId).updateData({
+      'photoUrl': photoUrl,
+    });
+    setState(() {
+      filePicked = true;
+    });
+  }
+
+  selectImage(parentContext) {
+    return showDialog(
+        context: parentContext,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text('Update Image'),
+            children: <Widget>[
+              SimpleDialogOption(
+                child: Text('Camera'),
+                onPressed: handleCameraPhoto,
+              ),
+              SimpleDialogOption(
+                child: Text('From Gallery'),
+                onPressed: handleGalleryPhoto,
+              ),
+              SimpleDialogOption(
+                child: Text('Cancel'),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        });
+  }
+
+  compressImage() async {
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    Im.Image imageFile = Im.decodeImage(file.readAsBytesSync());
+    final compressedFile = File('$path/profile_pic.jpg')
+      ..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
+    setState(() {
+      file = compressedFile;
+      print('file loaded');
+    });
+  }
+
+  Future<String> uploadImage(File imageFile) async {
+    StorageUploadTask uploadTask = storageRef
+        .child('post_profile_pic_postId:${currentUser.id}.jpg')
+        .putFile(imageFile);
+    StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
+    String downloadUrl = await storageSnap.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  cancelButtonAction() {
+    file = null;
+    filePicked = false;
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         title: Center(
           child: Text(
@@ -133,31 +243,29 @@ class _EditProfileState extends State<EditProfile> {
             ),
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.done,
-              color: Colors.green,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
       ),
       body: isLoading
           ? circularProgress()
           : ListView(
               children: <Widget>[
+                isUploading ? linearProgress() : Text(''),
                 Container(
                   child: Column(
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-                        child: CircleAvatar(
-                          backgroundImage:
-                              CachedNetworkImageProvider(user.photoUrl),
-                          radius: 50,
+                        child: GestureDetector(
+                          onTap: () => selectImage(context),
+                          child: CircleAvatar(
+                            backgroundImage: filePicked
+                                ? FileImage(file)
+                                : CachedNetworkImageProvider(user.photoUrl),
+                            child: Icon(
+                              Icons.photo_camera,
+                              size: 40.0,
+                            ),
+                            radius: 50,
+                          ),
                         ),
                       ),
                       Padding(
@@ -173,11 +281,15 @@ class _EditProfileState extends State<EditProfile> {
                         height: 50.0,
                         width: 200.0,
                         decoration: BoxDecoration(
-                          color: Colors.teal,
+                          color: isSubmitButtonDisabled == false
+                              ? Colors.teal
+                              : Colors.grey,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: GestureDetector(
-                          onTap: updateProfileData,
+                          onTap: isSubmitButtonDisabled == false
+                              ? updateProfileData
+                              : null,
                           child: Center(
                             child: Text(
                               'Update Profile',
@@ -188,10 +300,31 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 20),
+                        height: 50.0,
+                        width: 200.0,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: GestureDetector(
+                          onTap: cancelButtonAction,
+                          child: Center(
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17.0),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
     );

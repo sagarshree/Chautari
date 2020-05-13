@@ -20,28 +20,28 @@
         "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/75ae327b6e362c58bb75d43b6b70c251/res/drawable-xhdpi-v4/notification_bg_low_pressed.9.png"
     },
     {
-        "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/drawable-watch-v20_common_google_signin_btn_text_dark_normal.xml.flat",
-        "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/jetified-play-services-auth-16.0.1.aar/0dcdd9903b433a2abf87db0722731c91/res/drawable-watch-v20/common_google_signin_btn_text_dark_normal.xml"
-    },
-    {
         "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/drawable_common_google_signin_btn_text_light_normal.xml.flat",
         "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/play-services-base-17.2.1.aar/9b1e719139781a00194c5d0ae3cfb61e/res/drawable/common_google_signin_btn_text_light_normal.xml"
     },
     {
-        "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/drawable-mdpi-v4_googleg_disabled_color_18.png.flat",
-        "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/play-services-base-17.2.1.aar/9b1e719139781a00194c5d0ae3cfb61e/res/drawable-mdpi-v4/googleg_disabled_color_18.png"
+        "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/drawable-watch-v20_common_google_signin_btn_text_dark_normal.xml.flat",
+        "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/jetified-play-services-auth-16.0.1.aar/0dcdd9903b433a2abf87db0722731c91/res/drawable-watch-v20/common_google_signin_btn_text_dark_normal.xml"
     },
     {
-        "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/drawable-xxhdpi-v4_googleg_standard_color_18.png.flat",
-        "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/play-services-base-17.2.1.aar/9b1e719139781a00194c5d0ae3cfb61e/res/drawable-xxhdpi-v4/googleg_standard_color_18.png"
+        "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/drawable-xxhdpi-v4_common_google_signin_btn_icon_light_normal_background.9.png.flat",
+        "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/play-services-base-17.2.1.aar/9b1e719139781a00194c5d0ae3cfb61e/res/drawable-xxhdpi-v4/common_google_signin_btn_icon_light_normal_background.9.png"
     },
     {
         "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/layout-v21_notification_action_tombstone.xml.flat",
         "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/75ae327b6e362c58bb75d43b6b70c251/res/layout-v21/notification_action_tombstone.xml"
     },
     {
-        "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/drawable-xxhdpi-v4_common_google_signin_btn_icon_light_normal_background.9.png.flat",
-        "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/play-services-base-17.2.1.aar/9b1e719139781a00194c5d0ae3cfb61e/res/drawable-xxhdpi-v4/common_google_signin_btn_icon_light_normal_background.9.png"
+        "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/drawable-xxhdpi-v4_googleg_standard_color_18.png.flat",
+        "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/play-services-base-17.2.1.aar/9b1e719139781a00194c5d0ae3cfb61e/res/drawable-xxhdpi-v4/googleg_standard_color_18.png"
+    },
+    {
+        "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/drawable-mdpi-v4_googleg_disabled_color_18.png.flat",
+        "source": "/home/shree/.gradle/caches/transforms-1/files-1.1/play-services-base-17.2.1.aar/9b1e719139781a00194c5d0ae3cfb61e/res/drawable-mdpi-v4/googleg_disabled_color_18.png"
     },
     {
         "merged": "/home/shree/Documents/Development/Flutter Projects/Chautari/build/app/intermediates/res/merged/debug/drawable_common_google_signin_btn_text_light.xml.flat",

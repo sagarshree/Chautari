@@ -27,7 +27,7 @@ dependencies:
   geolocator: 5.0.1
   uuid: ^2.0.0
   image: ^2.0.7
-  animator: 0.1.4
+  animator: ^2.0.0
   cupertino_icons: ^0.1.2
   firebase_messaging: ^4.0.0+1
   timeago: 2.0.17
@@ -63,4 +63,7 @@ flutter:
     - assets/images/activity_feed.svg
     - assets/images/no_content.svg
     - assets/images/chautari.png
+    - assets/images/upload1.svg
+
+
 

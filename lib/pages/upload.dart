@@ -133,7 +133,7 @@ class _UploadState extends State<Upload> {
     postsRef
         .document(widget.currentUser.id)
         .collection('userPosts')
-        .document('postId')
+        .document('$postId')
         .setData({
       'postId': postId,
       'ownerId': widget.currentUser.id,

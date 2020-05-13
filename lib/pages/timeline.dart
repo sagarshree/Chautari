@@ -28,11 +28,6 @@ class _TimelineState extends State<Timeline> {
           final List<Text> children = snapshot.data.documents
               .map((doc) => Text(doc['username']))
               .toList();
-          return Container(
-            child: ListView(
-              children: children,
-            ),
-          );
         },
       ),
     );
