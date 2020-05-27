@@ -24,6 +24,8 @@ class _EditProfileState extends State<EditProfile> {
   // final _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController displayNameController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+
   File file;
   String photoUrl;
   bool isLoading = false;
@@ -33,6 +35,7 @@ class _EditProfileState extends State<EditProfile> {
   bool filePicked = false;
   bool isUploading = false;
   bool isSubmitButtonDisabled = false;
+  bool _validUsername = true;
 
   @override
   void initState() {
@@ -49,6 +52,7 @@ class _EditProfileState extends State<EditProfile> {
     user = User.fromDocuments(doc);
     displayNameController.text = user.displayName;
     bioController.text = user.bio;
+    usernameController.text = user.username;
     setState(() {
       isLoading = false;
     });
@@ -57,55 +61,62 @@ class _EditProfileState extends State<EditProfile> {
   Container buildDisplayNameField() {
     return Container(
       margin: EdgeInsets.only(bottom: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          // Padding(
-          //   padding: EdgeInsets.only(top: 12),
-          //   child: Text(
-          //     'DisplayName',
-          //     style: TextStyle(
-          //       color: Colors.grey,
-          //     ),
-          //   ),
-          // ),
-          TextField(
-            controller: displayNameController,
-            decoration: InputDecoration(
-                hintText: 'Update Name',
-                border: OutlineInputBorder(),
-                labelText: 'Display Name',
-                errorText:
-                    _validDisplayName ? null : 'Display Name too short!!'),
-          )
-        ],
+      child: TextField(
+        controller: displayNameController,
+        decoration: InputDecoration(
+            hintText: 'Update Name',
+            border: OutlineInputBorder(),
+            labelText: 'Display Name',
+            errorText: _validDisplayName ? null : 'Display Name too short!!'),
       ),
     );
   }
 
   buildBioNameField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        // Padding(
-        //   padding: EdgeInsets.only(top: 12),
-        //   child: Text(
-        //     'Bio',
-        //     style: TextStyle(
-        //       color: Colors.grey,
-        //     ),
-        //   ),
-        // ),
-        TextFormField(
-          controller: bioController,
+    return Container(
+        child:
+            // Padding(
+            //   padding: EdgeInsets.only(top: 12),
+            //   child: Text(
+            //     'Bio',
+            //     style: TextStyle(
+            //       color: Colors.grey,
+            //     ),
+            //   ),
+            // ),
+            TextFormField(
+      controller: bioController,
+      decoration: InputDecoration(
+          hintText: 'Update Bio',
+          border: OutlineInputBorder(),
+          labelText: 'Bio',
+          errorText: _validBio ? null : 'Bio too long!!'),
+    ));
+  }
+
+  buildUsernameField() {
+    return Container(
+        margin: EdgeInsets.only(bottom: 10.0),
+        child:
+            // Padding(
+            //   padding: EdgeInsets.only(top: 12),
+            //   child: Text(
+            //     'Bio',
+            //     style: TextStyle(
+            //       color: Colors.grey,
+            //     ),
+            //   ),
+            // ),
+            TextFormField(
+          controller: usernameController,
           decoration: InputDecoration(
-              hintText: 'Update Bio',
+              hintText: 'Update username',
               border: OutlineInputBorder(),
-              labelText: 'Bio',
-              errorText: _validBio ? null : 'Bio too long!!'),
-        )
-      ],
-    );
+              labelText: 'Username',
+              errorText: _validUsername
+                  ? null
+                  : 'Username can\'t be less than 5 and greater than 25 characters!!'),
+        ));
   }
 
   updateProfileData() async {
@@ -117,6 +128,10 @@ class _EditProfileState extends State<EditProfile> {
       bioController.text.trim().length > 100
           ? _validBio = false
           : _validBio = true;
+      (usernameController.text.trim().length < 5 &&
+              usernameController.text.trim().length > 25)
+          ? _validUsername = false
+          : _validUsername = true;
     });
 
     if (_validBio && _validDisplayName) {
@@ -128,6 +143,7 @@ class _EditProfileState extends State<EditProfile> {
       userRef.document(widget.currentUserId).updateData({
         'displayName': displayNameController.text,
         'bio': bioController.text,
+        'username': usernameController.text.trim(),
       });
 
       setState(() {
@@ -272,6 +288,7 @@ class _EditProfileState extends State<EditProfile> {
                         padding: EdgeInsets.all(16.0),
                         child: Column(
                           children: <Widget>[
+                            buildUsernameField(),
                             buildDisplayNameField(),
                             buildBioNameField(),
                           ],

@@ -22,7 +22,8 @@ class Upload extends StatefulWidget {
   _UploadState createState() => _UploadState();
 }
 
-class _UploadState extends State<Upload> {
+class _UploadState extends State<Upload>
+    with AutomaticKeepAliveClientMixin<Upload> {
   File file;
   bool isUploading = false;
   String postId = Uuid().v4();
@@ -306,6 +307,13 @@ class _UploadState extends State<Upload> {
 
   @override
   Widget build(BuildContext context) {
+    // 1)user'with AutomaticKeepAliveClientMixin<Upload>' in state class
+    // 2) to make page not to lose state after coming back to that page
+    super.build(context);
     return file == null ? buildSplashScreen() : buildUploadForm();
   }
+
+  @override
+  // 3) to make page not to lose state after coming back to that page
+  bool get wantKeepAlive => true;
 }

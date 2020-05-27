@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/edit_profile.dart';
 import 'package:fluttershare/pages/home.dart';
-import 'package:fluttershare/pages/timeline.dart';
 import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/widgets/post.dart';
 import 'package:fluttershare/widgets/post_tile.dart';
@@ -13,26 +12,64 @@ import 'package:fluttershare/widgets/progress.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
+  final func;
 
-  Profile({this.profileId});
+  Profile({this.profileId, this.func});
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  final String currentUserId = currentUser.id;
+  final String currentUserId = currentUser?.id;
   bool isLoading = false;
   int postCount = 0;
   List<Post> posts = [];
   String postOrientation = 'grid';
   Color listIconColor = Colors.grey;
   Color gridIconColor;
+  bool isFollowing = false;
+  int followersCount = 0;
+  int followingCount = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getProfilePosts();
+    getFollowersCount();
+    getFollowingCount();
+    checkIfFollowing();
+  }
+
+  getFollowersCount() async {
+    QuerySnapshot doc = await followersRef
+        .document(widget.profileId)
+        .collection('userFollowers')
+        .getDocuments();
+    setState(() {
+      followersCount = doc.documents.length;
+    });
+  }
+
+  getFollowingCount() async {
+    QuerySnapshot doc = await followingRef
+        .document(widget.profileId)
+        .collection('userFollowing')
+        .getDocuments();
+    setState(() {
+      followingCount = doc.documents.length;
+    });
+  }
+
+  checkIfFollowing() async {
+    DocumentSnapshot doc = await followersRef
+        .document(widget.profileId)
+        .collection('userFollowers')
+        .document(currentUserId)
+        .get();
+    setState(() {
+      isFollowing = doc.exists;
+    });
   }
 
   getProfilePosts() async {
@@ -85,21 +122,52 @@ class _ProfileState extends State<Profile> {
             builder: (context) => EditProfile(currentUserId: currentUserId)));
   }
 
+  Flexible buildFollowUnfollowButton({String text, Function function}) {
+    return Flexible(
+      child: Container(
+        padding: EdgeInsets.only(top: 2.0),
+        child: FlatButton(
+            onPressed: function,
+            child: Container(
+              height: 35.0,
+              child: Center(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: isFollowing ? Colors.black : Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              decoration: BoxDecoration(
+                color: isFollowing ? Colors.white : Colors.blue,
+                border: Border.all(
+                  color: isFollowing ? Colors.grey : Colors.blue,
+                ),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+            )),
+      ),
+    );
+  }
+
   Row buildButton(
       {String editProfileText,
+      BuildContext parentContext,
       String logoutText,
       Function editProfileButtonFunction,
       Function logoutButtonFunction}) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
           padding: EdgeInsets.only(top: 2.0),
-          child: FlatButton(
-              onPressed: editProfileButtonFunction,
+          child: GestureDetector(
+              onTap: editProfileButtonFunction,
               child: Container(
-                width: 120.0,
-                height: 27.0,
+                width: MediaQuery.of(parentContext).size.width * 0.37,
+                height: 35.0,
                 child: Center(
                   child: Text(
                     editProfileText,
@@ -110,21 +178,24 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.blue,
-                  border: Border.all(
-                    color: Colors.blue,
-                  ),
-                  borderRadius: BorderRadius.circular(5.0),
+                  gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Colors.blueAccent, Colors.teal]),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
               )),
         ),
+        SizedBox(
+          width: MediaQuery.of(parentContext).size.width * 0.05,
+        ),
         Container(
           padding: EdgeInsets.only(top: 2.0),
-          child: FlatButton(
-              onPressed: logoutButtonFunction,
+          child: GestureDetector(
+              onTap: logoutButtonFunction,
               child: Container(
-                width: 70.0,
-                height: 27.0,
+                width: MediaQuery.of(parentContext).size.width * 0.2,
+                height: 35.0,
                 child: Center(
                   child: Text(
                     logoutText,
@@ -135,11 +206,11 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.blue,
-                  border: Border.all(
-                    color: Colors.blue,
-                  ),
-                  borderRadius: BorderRadius.circular(5.0),
+                  gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Colors.blueAccent, Colors.teal]),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
               )),
         ),
@@ -147,7 +218,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  logoutAlert(parentContext) {
+  logoutAlert(parentContext, Function function) {
     return showDialog(
         context: parentContext,
         builder: (context) {
@@ -159,7 +230,7 @@ class _ProfileState extends State<Profile> {
                 child: Text('No'),
               ),
               FlatButton(
-                onPressed: logout,
+                onPressed: function,
                 child: Text('Yes'),
               )
             ],
@@ -167,24 +238,118 @@ class _ProfileState extends State<Profile> {
         });
   }
 
-  logout() async {
-    await googleSignIn.signOut();
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return Home();
-    }));
+  logout(Function func) async {
+    func();
+    return Home();
   }
 
-  buildProfileButton() {
+  buildProfileButton(BuildContext parentContext) {
     // viewing your own profile: should show edit profile button
     bool isProfileOwner = currentUserId == widget.profileId;
     if (isProfileOwner) {
       return buildButton(
+        parentContext: parentContext,
         editProfileText: 'Edit Profile',
         editProfileButtonFunction: editProfile,
         logoutText: 'Logout',
-        logoutButtonFunction: () => logoutAlert(context),
+        logoutButtonFunction: () => logoutAlert(context, widget.func),
+      );
+    } else if (isFollowing) {
+      return buildFollowUnfollowButton(
+        text: 'Unfollow',
+        function: () => logoutAlert(context, handleUnfollow),
+      );
+    } else {
+      return buildFollowUnfollowButton(
+        text: 'Follow',
+        function: handleFollow,
       );
     }
+  }
+
+  handleUnfollow() {
+    setState(() {
+      isFollowing = false;
+    });
+
+    //remove you from their followers collection
+    followersRef
+        .document(widget.profileId)
+        .collection('userFollowers')
+        .document(currentUserId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+
+    // remove them from your following collection
+    followingRef
+        .document(currentUserId)
+        .collection('userFollowing')
+        .document(widget.profileId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+
+    // delete from activityfeed
+
+    activityFeedRef
+        .document(widget.profileId)
+        .collection('feedItems')
+        .document(currentUserId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    setState(() {
+      followersCount -= 1;
+    });
+    Navigator.pop(context);
+  }
+
+  handleFollow() {
+    setState(() {
+      isFollowing = true;
+    });
+
+    //add you to their followers collection
+    followersRef
+        .document(widget.profileId)
+        .collection('userFollowers')
+        .document(currentUserId)
+        .setData({});
+
+    // add them to your following collection
+    followingRef
+        .document(currentUserId)
+        .collection('userFollowing')
+        .document(widget.profileId)
+        .setData({});
+
+    // notify them about new follower by adding to activityfeed
+
+    activityFeedRef
+        .document(widget.profileId)
+        .collection('feedItems')
+        .document(currentUserId)
+        .setData({
+      'type': 'follow',
+      'ownerId': widget.profileId,
+      'username': currentUser.username,
+      'userId': currentUserId,
+      'userProfileImage': currentUser.photoUrl,
+      'timeStamp': timeStamp,
+    });
+    setState(() {
+      followersCount += 1;
+    });
   }
 
   buildProfileHeader() {
@@ -215,14 +380,14 @@ class _ProfileState extends State<Profile> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             buildCountColumn('posts', postCount),
-                            buildCountColumn('followers', 0),
-                            buildCountColumn('following', 0),
+                            buildCountColumn('followers', followersCount),
+                            buildCountColumn('following', followingCount),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            buildProfileButton(),
+                            buildProfileButton(context),
                           ],
                         )
                       ],

@@ -6,18 +6,19 @@ Widget header(
   bool removeBackButton = false,
 }) {
   return AppBar(
+    centerTitle: true,
     automaticallyImplyLeading: removeBackButton ? false : true,
-    backgroundColor: Theme.of(context).accentColor,
-    title: Center(
-      child: Text(
-        title == null ? 'Chautari' : title,
-        style: title == null
-            ? TextStyle(
-                fontFamily: 'Galada',
-                fontSize: 50.0,
-              )
-            : TextStyle(fontSize: 25),
-      ),
+    backgroundColor: Colors.white,
+    // Theme.of(context).primaryColor,
+    title: Text(
+      title == null ? 'Chautari' : title,
+      style: title == null
+          ? TextStyle(
+              fontFamily: 'Galada',
+              fontSize: 50.0,
+              color: Colors.black,
+            )
+          : TextStyle(fontSize: 25, color: Colors.black),
     ),
   );
 }

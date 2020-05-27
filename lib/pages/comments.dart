@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -76,23 +75,25 @@ class CommentsState extends State<Comments> {
       'userId': currentUser.id,
     });
     bool isNotPostOwner = postOwnerId != currentUser.id;
-    if (isNotPostOwner) {
-      activityFeedRef.document(postOwnerId).collection('feedItems').add({
-        'type': 'comment',
-        'commentData': commentController.text,
-        'username': currentUser.username,
-        'userId': currentUser.id,
-        'userProfileImage': currentUser.photoUrl,
-        'postId': postId,
-        'mediaUrl': postMediaUrl,
-        'timeStamp': timeStamp,
-      });
-    }
+    // if (isNotPostOwner) {
+    activityFeedRef.document(postOwnerId).collection('feedItems').add({
+      'type': 'comment',
+      'commentData': commentController.text,
+      'username': currentUser.username,
+      'userId': currentUser.id,
+      'userProfileImage': currentUser.photoUrl,
+      'postId': postId,
+      'mediaUrl': postMediaUrl,
+      'timeStamp': timeStamp,
+    });
+    // }
 
     if (!isCommentEmpty) {
       SnackBar snackBar = SnackBar(
         duration: Duration(milliseconds: 500),
-        content: Text('Comment posted!!'),
+        content: Text(
+          'Comment posted!!',
+        ),
       );
       _scaffoldKey.currentState.showSnackBar(snackBar);
     }

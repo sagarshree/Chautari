@@ -14,15 +14,14 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^0.9.7+2
+  cloud_firestore: ^0.13.5
   image_picker: ^0.6.0+2
-  firebase_storage: ^2.1.0+1
-  firebase_auth: ^0.8.3
+  firebase_storage: ^3.1.5
   google_sign_in: ^4.0.1+1
   geolocator: 5.0.1
   uuid: ^2.0.0
@@ -37,6 +36,11 @@ dependencies:
   flutter_svg:
   font_awesome_flutter: ^8.8.1
   location: ^3.0.0
+  flutter_facebook_login: ^3.0.0
+  flutter_facebook_auth: ^0.2.3
+  firebase_auth: ^0.16.0
+  flutter_spinkit: ^4.1.2+1
+  
 
 dev_dependencies:
   flutter_test:
@@ -57,13 +61,15 @@ flutter:
       fonts:
         - asset: assets/fonts/Galada-Regular.ttf
   assets:
-    - assets/images/google_signin_button.png
     - assets/images/upload.svg
     - assets/images/search.svg
     - assets/images/activity_feed.svg
     - assets/images/no_content.svg
     - assets/images/chautari.png
     - assets/images/upload1.svg
+    - assets/images/logo.png
+    - assets/images/facebook.png
+    - assets/images/google.png
 
 
 

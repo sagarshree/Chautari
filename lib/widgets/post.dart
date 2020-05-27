@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/comments.dart';
 import 'package:fluttershare/pages/home.dart';
+import 'package:fluttershare/pages/profile.dart';
 import 'package:fluttershare/pages/timeline.dart';
 import 'package:fluttershare/widgets/custom_image.dart';
 import 'package:fluttershare/widgets/progress.dart';
@@ -102,13 +103,20 @@ class _PostState extends State<Post> {
           return circularProgress();
         }
         User user = User.fromDocuments(snapshot.data);
+        bool isPostOwner = currentUserId == ownerId;
         return ListTile(
           leading: CircleAvatar(
             backgroundImage: CachedNetworkImageProvider(user.photoUrl),
             backgroundColor: Colors.grey,
           ),
           title: GestureDetector(
-            onTap: () => print('User Profile'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return Profile(
+                  profileId: ownerId,
+                );
+              }));
+            },
             child: Text(
               user.displayName,
               style: TextStyle(
@@ -118,13 +126,86 @@ class _PostState extends State<Post> {
             ),
           ),
           subtitle: Text(location),
-          trailing: IconButton(
-            icon: Icon(Icons.more_vert),
-            onPressed: () => print('Delete Post'),
-          ),
+          trailing: isPostOwner
+              ? IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () => handleDeletePost(context),
+                )
+              : Text(''),
         );
       },
     );
+  }
+
+  handleDeletePost(parentContext) {
+    return showDialog(
+        context: parentContext,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text('Delete Post'),
+            children: <Widget>[
+              SimpleDialogOption(
+                  child: Text(
+                    'Delete',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    deletePost();
+                  }),
+              SimpleDialogOption(
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(),
+                ),
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+          );
+        });
+  }
+
+  deletePost() async {
+    setState(() {});
+    // Note: To delete a post ownerId and currentUserID must be equal so they can be used interchangeably
+    postsRef
+        // delete post from database
+        .document(ownerId)
+        .collection('userPosts')
+        .document(postId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    // delete post image from storage
+    storageRef.child('post_$postId.jpg').delete();
+    // delete all activity feed notifications
+    QuerySnapshot activityFeedSnapshot = await activityFeedRef
+        .document(ownerId)
+        .collection('feedItems')
+        .where('postId', isEqualTo: postId)
+        .getDocuments();
+
+    activityFeedSnapshot.documents.forEach((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+
+    QuerySnapshot commentsSnapshot = await commentsRef
+        .document(postId)
+        .collection('comments')
+        .getDocuments();
+
+    commentsSnapshot.documents.forEach((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
   }
 
   handleLikePost() {
@@ -167,24 +248,26 @@ class _PostState extends State<Post> {
   addLikeToActivityFeed() {
     // not to get notification for liking your own post
     bool isNotPostOwner = currentUserId != ownerId;
-    if (isNotPostOwner) {
-      activityFeedRef
-          .document(ownerId)
-          .collection('feedItems')
-          .document(postId)
-          .setData({
-        'type': 'like',
-        'username': currentUser.username,
-        'userId': currentUser.id,
-        'userProfileImage': currentUser.photoUrl,
-        'postId': postId,
-        'mediaUrl': mediaUrl,
-        'timeStamp': timeStamp
-      });
-    }
+    // if (isNotPostOwner) {
+    activityFeedRef
+        .document(ownerId)
+        .collection('feedItems')
+        .document(postId)
+        .setData({
+      'type': 'like',
+      'username': currentUser.username,
+      'userId': currentUser.id,
+      'userProfileImage': currentUser.photoUrl,
+      'postId': postId,
+      'mediaUrl': mediaUrl,
+      'timeStamp': timeStamp
+    });
+    // }
   }
 
   removeLikeFromActivityFeed() {
+    //  bool isNotPostOwner = currentUserId != ownerId;
+    // if (isNotPostOwner) {
     activityFeedRef
         .document(ownerId)
         .collection('feedItems')
@@ -195,6 +278,7 @@ class _PostState extends State<Post> {
         doc.reference.delete();
       }
     });
+    // }
   }
 
   buildPostImage() {

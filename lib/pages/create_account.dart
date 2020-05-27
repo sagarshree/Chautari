@@ -63,7 +63,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   }
                 },
                 onSaved: (val) {
-                  username = val;
+                  username = val.toLowerCase();
                 },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(

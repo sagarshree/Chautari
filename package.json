@@ -1,0 +1,23 @@
+{
+  "name": "chautari",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sagarshree/Chautari.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sagarshree/Chautari/issues"
+  },
+  "homepage": "https://github.com/sagarshree/Chautari#readme"
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Chautari</string>
+    <string name="facebook_app_id">308701890159729</string>
+    <string name="fb_login_protocol_scheme">fb308701890159729</string>
+    
+</resources>

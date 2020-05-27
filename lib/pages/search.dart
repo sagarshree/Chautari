@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttershare/models/user.dart';
+import 'package:fluttershare/pages/profile.dart';
 import 'package:fluttershare/pages/timeline.dart';
-import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/widgets/progress.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,7 +13,8 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchState extends State<Search>
+    with AutomaticKeepAliveClientMixin<Search> {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
 
@@ -108,6 +109,7 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
       appBar: buildSearchField(),
@@ -115,6 +117,9 @@ class _SearchState extends State<Search> {
           searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
     );
   }
+
+  // @override
+  bool get wantKeepAlive => true;
 }
 
 class UserResult extends StatelessWidget {
@@ -123,13 +128,21 @@ class UserResult extends StatelessWidget {
   UserResult({this.user});
   @override
   Widget build(BuildContext context) {
+    goToProfilPage() {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return Profile(
+          profileId: user.id,
+        );
+      }));
+    }
+
     return Container(
       child: Column(
         children: <Widget>[
           Card(
             elevation: 10,
             child: GestureDetector(
-              onTap: () => print('User Details!'),
+              onTap: () => goToProfilPage(),
               child: ListTile(
                 leading: CircleAvatar(
                   backgroundImage: CachedNetworkImageProvider(user.photoUrl),
@@ -147,13 +160,6 @@ class UserResult extends StatelessWidget {
                     color: Colors.black54,
                   ),
                 ),
-                trailing: IconButton(
-                    icon: Icon(
-                      Icons.group_add,
-                      size: 40,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {}),
               ),
             ),
           ),
